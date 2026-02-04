@@ -1226,8 +1226,8 @@
                 isNidhi = name.toLowerCase() === "nidhi";
                 const messages = isNidhi ? nidhiMessages : genericMessages;
                 
-                // Update the content based on the name (original wording)
-                personalizedGreeting.textContent = isNidhi ? messages.greeting : `Welcome, ${name}!`;
+                // Update the content based on the name
+                personalizedGreeting.textContent = messages.greeting;
                 tagline.textContent = messages.tagline;
                 surpriseNote.textContent = messages.surprise;
                 poemTitle.textContent = messages.poemTitle;
