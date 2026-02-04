@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Someone Special</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffd6e7, #c1f0ff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #5a3d5c;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Floating Background Elements */
+        .floating-flower {
+            position: fixed;
+            z-index: -1;
+            font-size: 25px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Flower Falling Animation */
+        @keyframes flowerFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Flower Bloom Animation */
+        @keyframes flowerBloom {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Blooming flowers on UI */
+        .blooming-flower {
+            position: fixed;
+            z-index: 5;
+            font-size: 30px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(139, 128, 0, 0.15);
+            overflow: hidden;
+            transition: all 0.5s ease;
+            border: 3px solid #ffd700;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Login Screen Styles */
+        #login-screen {
+            padding: 60px 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 500px;
+            background: linear-gradient(to bottom, #fff9e6, #ffffff);
+        }
+        
+        .login-title {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ff6b9d, #c779d0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .login-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: #7a7a7a;
+            max-width: 500px;
+        }
+        
+        .name-input-container {
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+        
+        .name-input {
+            width: 100%;
+            padding: 18px 25px;
+            border: none;
+            border-radius: 50px;
+            background-color: #f8f8f8;
+            font-size: 1.2rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            color: #5a3d5c;
+            border: 2px solid #ffd700;
+        }
+        
+        .name-input:focus {
+            outline: none;
+            box-shadow: 0 5px 20px rgba(199, 121, 208, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to right, #ff6b9d, #c779d0);
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(199, 121, 208, 0.3);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(199, 121, 208, 0.4);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .hint {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            font-style: italic;
+        }
+        
+        /* Main Content Styles (Initially Hidden) */
+        #main-content, #second-page {
+            display: none;
+            padding: 0;
+        }
+        
+        /* Profile Image Section */
+        .profile-section {
+            padding: 40px 40px 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, #fff9e6, #ffffff);
+        }
+        
+        .personalized-greeting {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ff6b9d, #c779d0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            color: #7a7a7a;
+            font-style: italic;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .image-container {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            border: 8px solid #ffd700;
+            position: relative;
+            background: linear-gradient(145deg, #f0f0f0, #ffffff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ff9ec0;
+        }
+        
+        .image-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        
+        .image-note {
+            font-size: 1.1rem;
+            color: #5a3d5c;
+            max-width: 250px;
+            text-align: center;
+        }
+        
+        /* Poem Section */
+        .poem-section {
+            padding: 40px;
+            background-color: white;
+            min-height: 500px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            color: #ff6b9d;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #ff6b9d, #c779d0);
+            border-radius: 3px;
+        }
+        
+        .poem-container {
+            background: linear-gradient(145deg, #f8f8f8, #ffffff);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            border: 2px solid #ffd700;
+        }
+        
+        .poem-line {
+            font-size: 1.6rem;
+            line-height: 2.0;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #5a3d5c;
+            font-weight: 500;
+            position: relative;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        
+        .poem-line:before {
+            content: "❀";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff6b9d;
+        }
+        
+        .poem-line:nth-child(even):before {
+            content: "✨";
+        }
+        
+        /* Next Button */
+        .next-btn-container {
+            text-align: center;
+            padding: 20px 40px;
+            background-color: white;
+        }
+        
+        .next-btn {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+        
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+        }
+        
+        /* Second Page Styles */
+        .second-page-header {
+            padding: 40px 40px 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, #e6f7ff, #ffffff);
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #5a7a8c;
+            font-style: italic;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        /* Gallery Section */
+        .gallery-section {
+            padding: 40px;
+            background-color: white;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .gallery-item {
+            background: linear-gradient(145deg, #f0f0f0, #ffffff);
+            border-radius: 15px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid #b3e0ff;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .gallery-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: #4facfe;
+        }
+        
+        .gallery-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #5a7a8c;
+            margin-bottom: 10px;
+            text-align: center;
+            padding: 0 15px;
+        }
+        
+        /* Message Section */
+        .message-section {
+            padding: 40px;
+            background: linear-gradient(to bottom, #fff9e6, #ffffff);
+        }
+        
+        .message-container {
+            background: linear-gradient(145deg, #f8f8f8, #ffffff);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border: 2px solid #ffd700;
+        }
+        
+        .message-title {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: #ff6b9d;
+            text-align: center;
+        }
+        
+        .message-content {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #5a3d5c;
+            text-align: center;
+            font-style: italic;
+        }
+        
+        /* Back Button */
+        .back-btn-container {
+            text-align: center;
+            padding: 20px 40px;
+            background-color: white;
+        }
+        
+        .back-btn {
+            background: linear-gradient(to right, #ff6b9d, #c779d0);
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(199, 121, 208, 0.3);
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(199, 121, 208, 0.4);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 2px dashed #ffcce0;
+            color: #7a7a7a;
+            font-style: italic;
+        }
+        
+        .surprise-note {
+            font-size: 1.1rem;
+            color: #ff6b9d;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 2px solid #ffd700;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #ff6b9d;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-input:focus {
+            outline: none;
+            border-color: #ff6b9d;
+        }
+        
+        .modal-btn {
+            background: linear-gradient(to right, #ff6b9d, #c779d0);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(199, 121, 208, 0.3);
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(199, 121, 208, 0.4);
+        }
+        
+        .error-message {
+            color: #ff3366;
+            margin-top: 10px;
+            font-weight: 600;
+            display: none;
+        }
+        
+        /* Animation for content reveal */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .personalized-greeting, .login-title, .page-title {
+                font-size: 2.2rem;
+            }
+            
+            .container {
+                border-radius: 15px;
+            }
+            
+            #login-screen, .profile-section, .poem-section, .second-page-header, .gallery-section, .message-section {
+                padding: 40px 20px;
+            }
+            
+            .image-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .poem-line {
+                font-size: 1.4rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .message-content {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .image-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .poem-line {
+                font-size: 1.2rem;
+                line-height: 1.8;
+            }
+            
+            .section-title, .page-title {
+                font-size: 1.8rem;
+            }
+            
+            .poem-container, .message-container {
+                padding: 25px 20px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Flower container -->
+    <div id="flower-container"></div>
+    
+    <!-- Modal for Security Question -->
+    <div class="modal-overlay" id="security-modal">
+        <div class="modal-content fade-in">
+            <h2 class="modal-title">One More Question, Princess!</h2>
+            <p style="margin-bottom: 20px; color: #5a3d5c;">To unlock the next page, tell me who your best friend is:</p>
+            
+            <input type="text" id="security-input" class="modal-input" placeholder="Enter your best friend's name...">
+            <button id="security-submit" class="modal-btn">Proceed to Next Page</button>
+            
+            <div class="error-message" id="security-error">Oops! That's not correct. Try again!</div>
+            
+            <p style="margin-top: 20px; font-size: 0.9rem; color: #a0a0a0;">Hint: Think of the person who created this page for you</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="login-screen">
+            <h1 class="login-title">Welcome to a Special Page</h1>
+            <p class="login-subtitle">This page is dedicated to someone truly amazing. To enter, please tell us your name.</p>
+            
+            <div class="name-input-container">
+                <input type="text" id="name-input" class="name-input" placeholder="Enter your name here...">
+            </div>
+            
+            <button id="submit-btn" class="submit-btn">Enter the Special World</button>
+            
+            <p class="hint">Hint: Try entering "Nidhi" for a magical experience</p>
+        </div>
+        
+        <!-- First Page (Main Content) -->
+        <div id="main-content">
+            <!-- Profile Image Section -->
+            <div class="profile-section">
+                <h1 id="personalized-greeting" class="personalized-greeting">Welcome to world of the most beautiful woman</h1>
+                <p class="tagline" id="tagline">A tribute to someone truly extraordinary</p>
+                
+                <div class="image-container">
+                    <!-- TO ADD IMAGE: Replace the src with your image path -->
+                    <!-- Example: <img id="profile-image" src="https://example.com/nidhi-profile.jpg" alt="Her Picture"> -->
+                    <img id="profile-image" src="" alt="Her Picture">
+                    <div class="image-placeholder" id="image-placeholder">
+                        <i class="fas fa-user-circle image-icon"></i>
+                        <div class="image-note">A beautiful picture of you would go here</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Poem Section -->
+            <div class="poem-section">
+                <h2 class="section-title fade-in" id="poem-title">ನಿಧಿಗೆ ಸಮರ್ಪಿತ</h2>
+                
+                <div class="poem-container fade-in" style="animation-delay: 0.4s" id="poem-container">
+                    <!-- Poem lines will be inserted here by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Next Button -->
+            <div class="next-btn-container fade-in" style="animation-delay: 0.8s">
+                <button id="next-page-btn" class="next-btn">
+                    <i class="fas fa-arrow-right"></i> Continue to Next Page
+                </button>
+            </div>
+            
+            <!-- Footer -->
+            <div class="footer fade-in" style="animation-delay: 1.2s">
+                <p>This page was created with admiration and friendship</p>
+                <p class="surprise-note" id="surprise-note">She's more amazing than she knows!</p>
+            </div>
+        </div>
+        
+        <!-- Second Page (Hidden Initially) -->
+        <div id="second-page">
+            <!-- Header -->
+            <div class="second-page-header">
+                <h1 class="page-title">More Beautiful Moments</h1>
+                <p class="page-subtitle">A collection celebrating an extraordinary person</p>
+            </div>
+            
+            <!-- Gallery Section -->
+            <div class="gallery-section">
+                <h2 class="section-title fade-in" id="gallery-title">Her Special Gallery</h2>
+                
+                <div class="gallery-grid">
+                    <!-- Gallery Item 1 -->
+                    <div class="gallery-item fade-in" id="gallery-item-1">
+                        <!-- TO ADD IMAGE: Replace the src with your image path -->
+                        <!-- Example: <img class="gallery-image" id="gallery-image-1" src="https://example.com/nidhi-smile.jpg" alt="Her Beautiful Smile"> -->
+                        <img class="gallery-image" id="gallery-image-1" src="" alt="Her Beautiful Smile">
+                        <i class="fas fa-smile-beam gallery-icon"></i>
+                        <div class="gallery-label">Her Beautiful Smile</div>
+                    </div>
+                    
+                    <!-- Gallery Item 2 -->
+                    <div class="gallery-item fade-in" style="animation-delay: 0.2s" id="gallery-item-2">
+                        <!-- TO ADD IMAGE: Replace the src with your image path -->
+                        <img class="gallery-image" id="gallery-image-2" src="" alt="Her Shining Moments">
+                        <i class="fas fa-star gallery-icon"></i>
+                        <div class="gallery-label">Her Shining Moments</div>
+                    </div>
+                    
+                    <!-- Gallery Item 3 -->
+                    <div class="gallery-item fade-in" style="animation-delay: 0.4s" id="gallery-item-3">
+                        <!-- TO ADD IMAGE: Replace the src with your image path -->
+                        <img class="gallery-image" id="gallery-image-3" src="" alt="Her Joyful Memories">
+                        <i class="fas fa-heart gallery-icon"></i>
+                        <div class="gallery-label">Her Joyful Memories</div>
+                    </div>
+                    
+                    <!-- Gallery Item 4 -->
+                    <div class="gallery-item fade-in" style="animation-delay: 0.6s" id="gallery-item-4">
+                        <!-- TO ADD IMAGE: Replace the src with your image path -->
+                        <img class="gallery-image" id="gallery-image-4" src="" alt="Queen of Hearts">
+                        <i class="fas fa-crown gallery-icon"></i>
+                        <div class="gallery-label">Queen of Hearts</div>
+                    </div>
+                </div>
+                
+                <p style="text-align: center; color: #7a7a7a; margin-top: 20px; font-style: italic;">
+                    Each of these placeholders is waiting for her beautiful photos
+                </p>
+            </div>
+            
+            <!-- Message Section -->
+            <div class="message-section">
+                <div class="message-container fade-in" style="animation-delay: 0.8s">
+                    <h2 class="message-title" id="message-title">A Message About Her</h2>
+                    
+                    <div class="message-content" id="message-content">
+                        <!-- Message content will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Back Button -->
+            <div class="back-btn-container fade-in" style="animation-delay: 1.2s">
+                <button id="back-page-btn" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to First Page
+                </button>
+            </div>
+            
+            <!-- Footer -->
+            <div class="footer fade-in" style="animation-delay: 1.4s">
+                <p>Made with ❤️ for someone truly special</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginScreen = document.getElementById('login-screen');
+            const mainContent = document.getElementById('main-content');
+            const secondPage = document.getElementById('second-page');
+            const nameInput = document.getElementById('name-input');
+            const submitBtn = document.getElementById('submit-btn');
+            const profileImage = document.getElementById('profile-image');
+            const imagePlaceholder = document.getElementById('image-placeholder');
+            const personalizedGreeting = document.getElementById('personalized-greeting');
+            const tagline = document.getElementById('tagline');
+            const surpriseNote = document.getElementById('surprise-note');
+            const poemTitle = document.getElementById('poem-title');
+            const poemContainer = document.getElementById('poem-container');
+            const nextPageBtn = document.getElementById('next-page-btn');
+            const backPageBtn = document.getElementById('back-page-btn');
+            const securityModal = document.getElementById('security-modal');
+            const securityInput = document.getElementById('security-input');
+            const securitySubmit = document.getElementById('security-submit');
+            const securityError = document.getElementById('security-error');
+            const messageTitle = document.getElementById('message-title');
+            const messageContent = document.getElementById('message-content');
+            const flowerContainer = document.getElementById('flower-container');
+            const galleryTitle = document.getElementById('gallery-title');
+            
+            // Get gallery images
+            const galleryImages = [
+                document.getElementById('gallery-image-1'),
+                document.getElementById('gallery-image-2'),
+                document.getElementById('gallery-image-3'),
+                document.getElementById('gallery-image-4')
+            ];
+            const galleryItems = [
+                document.getElementById('gallery-item-1'),
+                document.getElementById('gallery-item-2'),
+                document.getElementById('gallery-item-3'),
+                document.getElementById('gallery-item-4')
+            ];
+            
+            // Flower types for animations
+            const flowerTypes = ['🌸', '🌺', '🌼', '🌹', '🌷', '💐', '🌻'];
+            const flowerColors = ['#ff6b9d', '#ff8e53', '#ffd700', '#4facfe', '#9b59b6', '#2ecc71', '#ff3838'];
+            
+            // White flowers array
+            const whiteFlowers = ['🌸', '🌼'];
+            
+            // Function to create falling flowers
+            function createFallingFlower(isWhite = false) {
+                const flower = document.createElement('div');
+                flower.className = 'floating-flower';
+                
+                let flowerType;
+                if (isWhite && Math.random() > 0.7) {
+                    flowerType = whiteFlowers[Math.floor(Math.random() * whiteFlowers.length)];
+                } else {
+                    flowerType = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+                }
+                
+                flower.innerHTML = flowerType;
+                
+                // Random position
+                const leftPos = Math.random() * 100;
+                flower.style.left = leftPos + 'vw';
+                
+                // Random size
+                const size = Math.random() * 25 + 20;
+                flower.style.fontSize = size + 'px';
+                
+                // Random color for colored flowers
+                if (!isWhite && Math.random() > 0.3) {
+                    flower.style.color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+                }
+                
+                // Random animation duration
+                const duration = Math.random() * 5 + 8;
+                flower.style.animation = `flowerFall ${duration}s linear forwards`;
+                
+                // Random animation delay
+                const delay = Math.random() * 2;
+                flower.style.animationDelay = delay + 's';
+                
+                flowerContainer.appendChild(flower);
+                
+                // Remove flower after animation completes
+                setTimeout(() => {
+                    if (flower.parentNode) {
+                        flower.remove();
+                    }
+                }, (duration + delay) * 1000);
+                
+                return flower;
+            }
+            
+            // Function to create blooming flowers on UI elements
+            function createBloomingFlower(element, isWhite = false) {
+                const rect = element.getBoundingClientRect();
+                
+                // Create multiple blooms around the element
+                const bloomCount = Math.floor(Math.random() * 3) + 2;
+                for (let i = 0; i < bloomCount; i++) {
+                    const bloom = document.createElement('div');
+                    bloom.className = 'blooming-flower';
+                    
+                    let flowerType;
+                    if (isWhite && Math.random() > 0.5) {
+                        flowerType = whiteFlowers[Math.floor(Math.random() * whiteFlowers.length)];
+                    } else {
+                        flowerType = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+                    }
+                    
+                    bloom.innerHTML = flowerType;
+                    
+                    // Position around the element
+                    const offsetX = Math.random() * rect.width - rect.width/2;
+                    const offsetY = Math.random() * rect.height - rect.height/2;
+                    
+                    bloom.style.left = (rect.left + rect.width/2 + offsetX) + 'px';
+                    bloom.style.top = (rect.top + rect.height/2 + offsetY) + 'px';
+                    
+                    // Random size
+                    const size = Math.random() * 20 + 25;
+                    bloom.style.fontSize = size + 'px';
+                    
+                    // Random color for colored flowers
+                    if (!isWhite && Math.random() > 0.4) {
+                        bloom.style.color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+                    }
+                    
+                    // Animation
+                    const duration = Math.random() * 1.5 + 1;
+                    bloom.style.animation = `flowerBloom ${duration}s ease-out forwards`;
+                    
+                    document.body.appendChild(bloom);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        if (bloom.parentNode) {
+                            bloom.remove();
+                        }
+                    }, duration * 1000);
+                }
+            }
+            
+            // Function to start continuous flower fall
+            function startFlowerFall(isNidhi = false) {
+                // Initial burst of flowers
+                const initialCount = isNidhi ? 40 : 15;
+                for (let i = 0; i < initialCount; i++) {
+                    setTimeout(() => {
+                        createFallingFlower(isNidhi && Math.random() > 0.7);
+                    }, i * 50);
+                }
+                
+                // Continuous falling flowers
+                const flowerInterval = setInterval(() => {
+                    if (Math.random() > 0.3) {
+                        createFallingFlower(isNidhi && Math.random() > 0.6);
+                    }
+                }, 500);
+                
+                return flowerInterval;
+            }
+            
+            // Function to trigger blooms on specific elements
+            function triggerElementBlooms(isNidhi = false) {
+                // Bloom on greeting
+                setTimeout(() => {
+                    createBloomingFlower(personalizedGreeting, isNidhi);
+                }, 500);
+                
+                // Bloom on image container
+                setTimeout(() => {
+                    createBloomingFlower(document.querySelector('.image-container'), isNidhi);
+                }, 1000);
+                
+                // Bloom on poem title
+                setTimeout(() => {
+                    createBloomingFlower(poemTitle, isNidhi);
+                }, 1500);
+                
+                // Bloom on next button
+                setTimeout(() => {
+                    createBloomingFlower(nextPageBtn, isNidhi);
+                }, 2000);
+            }
+            
+            // Function to trigger blooms on second page
+            function triggerSecondPageBlooms(isNidhi = false) {
+                // Bloom on page title
+                setTimeout(() => {
+                    createBloomingFlower(document.querySelector('.page-title'), isNidhi);
+                }, 500);
+                
+                // Bloom on gallery items
+                galleryItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        createBloomingFlower(item, isNidhi && Math.random() > 0.5);
+                    }, 1000 + (index * 400));
+                });
+                
+                // Bloom on message container
+                setTimeout(() => {
+                    createBloomingFlower(document.querySelector('.message-container'), isNidhi);
+                }, 3000);
+                
+                // Extra white flowers for Nidhi on second page
+                if (isNidhi) {
+                    for (let i = 0; i < 8; i++) {
+                        setTimeout(() => {
+                            createFallingFlower(true);
+                        }, i * 200);
+                    }
+                }
+            }
+            
+            // Function to check if image URLs are provided and display them
+            function checkAndDisplayImages() {
+                // Check profile image
+                if (profileImage.src) {
+                    imagePlaceholder.style.display = 'none';
+                    profileImage.style.display = 'block';
+                }
+                
+                // Check gallery images
+                galleryImages.forEach((img, index) => {
+                    if (img.src) {
+                        const item = galleryItems[index];
+                        item.querySelector('.gallery-icon').style.display = 'none';
+                        item.querySelector('.gallery-label').style.display = 'none';
+                        img.style.display = 'block';
+                    }
+                });
+            }
+            
+            // Poem variations
+            const poemForNidhi = [
+                "ಕಡಲನ್ನು ಸುಂದರಗೊಳಿಸುವ ನೀಲಿ ಆಕಾಶ ನೀನು.",
+                "ನವಿಲನ್ನು ಸುಂದರಗೊಳಿಸುವ ಅದರ ಗರಿಯು ನೀನು.",
+                "ಭೂಮಿಗೆ ತಂಪು ನೀಡುವ ಮೊದಲ ಮಳೆಯ ಹನಿ ನೀನು.",
+                "ಮಳೆ ನಿಂತ ಮೇಲೆ, ಎಲೆ ಮೇಲೆ ಮುತ್ತಿನಂತೆ ಮಿನುಗುವ ಹನಿಯೂ ನೀನು.",
+                "ಜಗತ್ತನ್ನು ಹಸಿರಾಗಿಸುವ ಮುಂಜಾನೆಯ ಮೊದಲ ಬೆಳಕು ನೀನು.",
+                "ಕತ್ತಲಿನ ಮುನ್ನ, ನೀಲಿ ಅಂಬರವನ್ನು ಕೆಂಪಾಗಿಸುವ ಕಿರಣ ನೀನು.",
+                "ಕತ್ತಲನ್ನೇ ಸುಂದರಗೊಳಿಸುವ ಬೆಳದಿಂಗಳು ನೀನು."
+            ];
+            
+            const poemAboutNidhi = [
+                "ಕಡಲನ್ನು ಸುಂದರಗೊಳಿಸುವ ನೀಲಿ ಆಕಾಶ ಅವಳು.",
+                "ನವಿಲನ್ನು ಸುಂದರಗೊಳಿಸುವ ಅದರ ಗರಿಯು ಅವಳು.",
+                "ಭೂಮಿಗೆ ತಂಪು ನೀಡುವ ಮೊದಲ ಮಳೆಯ ಹನಿ ಅವಳು.",
+                "ಮಳೆ ನಿಂತ ಮೇಲೆ, ಎಲೆ ಮೇಲೆ ಮುತ್ತಿನಂತೆ ಮಿನುಗುವ ಹನಿಯೂ ಅವಳು.",
+                "ಜಗತ್ತನ್ನು ಹಸಿರಾಗಿಸುವ ಮುಂಜಾನೆಯ ಮೊದಲ ಬೆಳಕು ಅವಳು.",
+                "ಕತ್ತಲಿನ ಮುನ್ನ, ನೀಲಿ ಅಂಬರವನ್ನು ಕೆಂಪಾಗಿಸುವ ಕಿರಣ ಅವಳು.",
+                "ಕತ್ತಲನ್ನೇ ಸುಂದರಗೊಳಿಸುವ ಬೆಳದಿಂಗಳು ಅವಳು."
+            ];
+            
+            // Message variations (original wording)
+            const messageForNidhi = `
+                <p>My dear friend,</p>
+                <p style="margin-top: 20px;">
+                    You are the kind of person who makes the world brighter just by being in it. 
+                    Your smile has the power to light up the darkest days, and your heart is filled 
+                    with a kindness that touches everyone around you.
+                </p>
+                <p style="margin-top: 20px;">
+                    I wanted to create this little space to remind you of how amazing you are. 
+                    You deserve all the love, happiness, and beautiful moments that life has to offer.
+                </p>
+                <p style="margin-top: 20px; font-weight: 600; color: #ff6b9d;">
+                    Never forget how special you are to so many people, especially to me.
+                </p>
+                <p style="margin-top: 30px;">
+                    With all my admiration,<br>
+                    Your friend
+                </p>
+            `;
+            
+            const messageAboutNidhi = `
+                <p>Nidhi is the kind of person who makes the world brighter just by being in it. 
+                Her smile has the power to light up the darkest days, and her heart is filled 
+                with a kindness that touches everyone around her.</p>
+                
+                <p style="margin-top: 20px;">
+                    She possesses a unique combination of strength and grace that inspires everyone 
+                    who knows her. Whether she's facing challenges or celebrating joys, she does so 
+                    with a spirit that's truly admirable.
+                </p>
+                
+                <p style="margin-top: 20px;">
+                    This page was created to celebrate the incredible person she is - someone who 
+                    deserves all the love, happiness, and beautiful moments that life has to offer.
+                </p>
+                
+                <p style="margin-top: 20px; font-weight: 600; color: #ff6b9d;">
+                    She may not realize it, but she's deeply cherished by everyone who knows her.
+                </p>
+                
+                <p style="margin-top: 30px;">
+                    Created with admiration,<br>
+                    Someone who appreciates her
+                </p>
+            `;
+            
+            // Predefined messages for Nidhi (original wording)
+            const nidhiMessages = {
+                greeting: "Welcome to Your World, Princess Nidhi!",
+                tagline: "A world where you are admired, celebrated, and cherished beyond words",
+                surprise: "You're the most amazing friend anyone could ask for!",
+                poemTitle: "ನಿಧಿಗೆ ಸಮರ್ಪಿತ",
+                pageSubtitle: "A collection of memories and moments that celebrate you",
+                galleryTitle: "Your Special Gallery",
+                messageTitle: "A Message Just For You"
+            };
+            
+            // Generic messages for other names (original wording)
+            const genericMessages = {
+                greeting: "Welcome to world of the most beautiful woman",
+                tagline: "A tribute to someone truly extraordinary",
+                surprise: "She's more amazing than she knows!",
+                poemTitle: "ನಿಧಿಗೆ ಸಮರ್ಪಿತ",
+                pageSubtitle: "A collection celebrating an extraordinary person",
+                galleryTitle: "Her Special Gallery",
+                messageTitle: "A Message About Her"
+            };
+            
+            // Flag to track if user is Nidhi
+            let isNidhi = false;
+            let flowerInterval = null;
+            
+            // Handle form submission
+            submitBtn.addEventListener('click', revealContent);
+            nameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    revealContent();
+                }
+            });
+            
+            // Handle next page button
+            nextPageBtn.addEventListener('click', function() {
+                // Show security modal only if it's Nidhi
+                if (isNidhi) {
+                    securityModal.style.display = 'flex';
+                    securityInput.focus();
+                } else {
+                    // For non-Nidhi users, just go to second page
+                    mainContent.style.display = 'none';
+                    secondPage.style.display = 'block';
+                    
+                    // Check and display images
+                    checkAndDisplayImages();
+                    
+                    // Trigger animations on second page
+                    setTimeout(() => {
+                        const fadeElements = secondPage.querySelectorAll('.fade-in');
+                        fadeElements.forEach(el => {
+                            el.style.opacity = "1";
+                        });
+                        
+                        // Trigger blooms on second page
+                        triggerSecondPageBlooms(isNidhi);
+                    }, 100);
+                }
+            });
+            
+            // Handle back button
+            backPageBtn.addEventListener('click', function() {
+                secondPage.style.display = 'none';
+                mainContent.style.display = 'block';
+            });
+            
+            // Handle security question submission
+            securitySubmit.addEventListener('click', checkSecurityAnswer);
+            securityInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkSecurityAnswer();
+                }
+            });
+            
+            function checkSecurityAnswer() {
+                const answer = securityInput.value.trim().toLowerCase();
+                
+                if (answer === 'chandan') {
+                    // Correct answer - proceed to second page
+                    securityModal.style.display = 'none';
+                    mainContent.style.display = 'none';
+                    secondPage.style.display = 'block';
+                    
+                    // Check and display images
+                    checkAndDisplayImages();
+                    
+                    // Trigger animations on second page
+                    setTimeout(() => {
+                        const fadeElements = secondPage.querySelectorAll('.fade-in');
+                        fadeElements.forEach(el => {
+                            el.style.opacity = "1";
+                        });
+                        
+                        // Trigger blooms on second page
+                        triggerSecondPageBlooms(true);
+                    }, 100);
+                    
+                    // Clear input and hide error
+                    securityInput.value = '';
+                    securityError.style.display = 'none';
+                    
+                    // Add special effects for correct answer
+                    document.body.style.background = "linear-gradient(135deg, #a1c4fd, #c2e9fb)";
+                    
+                    // Show success message
+                    alert("Perfect! That's the right answer! ❤️");
+                } else {
+                    // Wrong answer - show error
+                    securityError.style.display = 'block';
+                    securityInput.value = '';
+                    securityInput.focus();
+                }
+            }
+            
+            function displayPoem(poemLines) {
+                poemContainer.innerHTML = '';
+                poemLines.forEach((line, index) => {
+                    const poemLine = document.createElement('div');
+                    poemLine.className = 'poem-line';
+                    poemLine.textContent = line;
+                    poemLine.style.animationDelay = `${0.4 + (index * 0.1)}s`;
+                    poemContainer.appendChild(poemLine);
+                });
+            }
+            
+            function revealContent() {
+                const name = nameInput.value.trim();
+                
+                if (name === "") {
+                    alert("Please enter a name to continue!");
+                    return;
+                }
+                
+                // Check if the name is "Nidhi" (case-insensitive)
+                isNidhi = name.toLowerCase() === "nidhi";
+                const messages = isNidhi ? nidhiMessages : genericMessages;
+                
+                // Update the content based on the name (original wording)
+                personalizedGreeting.textContent = isNidhi ? messages.greeting : `Welcome, ${name}!`;
+                tagline.textContent = messages.tagline;
+                surpriseNote.textContent = messages.surprise;
+                poemTitle.textContent = messages.poemTitle;
+                galleryTitle.textContent = messages.galleryTitle;
+                
+                // Update second page content
+                document.querySelector('.page-subtitle').textContent = messages.pageSubtitle;
+                messageTitle.textContent = messages.messageTitle;
+                
+                // Display appropriate poem
+                displayPoem(isNidhi ? poemForNidhi : poemAboutNidhi);
+                
+                // Display appropriate message on second page
+                messageContent.innerHTML = isNidhi ? messageForNidhi : messageAboutNidhi;
+                
+                // Check and display images
+                checkAndDisplayImages();
+                
+                // Add special effects for Nidhi
+                if (isNidhi) {
+                    document.body.style.background = "linear-gradient(135deg, #ffcce0, #ff99cc)";
+                    personalizedGreeting.style.background = "linear-gradient(to right, #ff3366, #ff6699)";
+                    personalizedGreeting.style.webkitBackgroundClip = "text";
+                    personalizedGreeting.style.webkitTextFillColor = "transparent";
+                    
+                    // Start flower falling animation with more flowers for Nidhi
+                    if (flowerInterval) clearInterval(flowerInterval);
+                    flowerInterval = startFlowerFall(true);
+                    
+                    // Trigger blooming flowers on UI elements with white flowers for Nidhi
+                    triggerElementBlooms(true);
+                    
+                    // Add special message to image placeholder
+                    document.querySelector('.image-note').textContent = "A beautiful picture of the amazing Nidhi";
+                    
+                    // Add subtle background pattern for Nidhi
+                    poemContainer.style.backgroundImage = "radial-gradient(#ffcce0 2px, transparent 2px)";
+                    poemContainer.style.backgroundSize = "20px 20px";
+                    poemContainer.style.backgroundPosition = "0 0, 10px 10px";
+                } else {
+                    // Update image placeholder for non-Nidhi
+                    document.querySelector('.image-note').textContent = "A beautiful picture of her would appear here";
+                    
+                    // Start subtle flower falling for non-Nidhi users
+                    if (flowerInterval) clearInterval(flowerInterval);
+                    flowerInterval = startFlowerFall(false);
+                    
+                    // Trigger subtle blooms for non-Nidhi
+                    triggerElementBlooms(false);
+                }
+                
+                // Hide login screen and show main content
+                loginScreen.style.display = "none";
+                mainContent.style.display = "block";
+                
+                // Trigger animations
+                setTimeout(() => {
+                    const fadeElements = mainContent.querySelectorAll('.fade-in');
+                    fadeElements.forEach(el => {
+                        el.style.opacity = "1";
+                    });
+                }, 100);
+            }
+            
+            // Start initial subtle flower fall
+            flowerInterval = startFlowerFall(false);
+            
+            // Focus on the input field
+            nameInput.focus();
+            
+            // Image setup instructions
+            console.log("🌸🌻🌼 IMAGE SETUP INSTRUCTIONS 🌼🌻🌸");
+            console.log("==========================================");
+            console.log("TO ADD IMAGES:");
+            console.log("1. Find these lines in the HTML:");
+            console.log("   - Line 284: <img id='profile-image' src='' alt='Her Picture'>");
+            console.log("   - Line 306: <img class='gallery-image' id='gallery-image-1' src='' alt='Her Beautiful Smile'>");
+            console.log("   - Line 315: <img class='gallery-image' id='gallery-image-2' src='' alt='Her Shining Moments'>");
+            console.log("   - Line 324: <img class='gallery-image' id='gallery-image-3' src='' alt='Her Joyful Memories'>");
+            console.log("   - Line 333: <img class='gallery-image' id='gallery-image-4' src='' alt='Queen of Hearts'>");
+            console.log("");
+            console.log("2. Replace the empty src='' with your image URLs:");
+            console.log("   Example: src='https://example.com/nidhi-profile.jpg'");
+            console.log("");
+            console.log("3. Save the file and refresh the page");
+            console.log("4. The images will automatically display when available");
+            console.log("==========================================");
+        });
+    </script>
+</body>
+</html>
