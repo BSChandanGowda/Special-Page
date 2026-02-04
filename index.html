@@ -1398,7 +1398,7 @@
             async function checkSecurityAnswer() {
                 const answer = securityInput.value.trim().toLowerCase();
                 
-                if (answer === 'Drama Queen') {
+                if (answer.toLowerCase() === 'drama queen') {
                     currentUser.answeredSecurity = true;
                     securityModal.style.display = 'none';
                     mainContent.style.display = 'none';
