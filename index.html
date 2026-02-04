@@ -676,8 +676,7 @@
                 <p class="tagline" id="tagline">A tribute to someone truly extraordinary</p>
                 
                 <div class="image-container">
-                    <!-- TO ADD IMAGE: Replace the src with your image path -->
-                    <!-- Example: <img id="profile-image" src="https://example.com/nidhi-profile.jpg" alt="Her Picture"> -->
+                    <!-- Images will be loaded dynamically based on user -->
                     <img id="profile-image" src="" alt="Her Picture">
                     <div class="image-placeholder" id="image-placeholder">
                         <i class="fas fa-user-circle image-icon"></i>
@@ -724,8 +723,7 @@
                 <div class="gallery-grid">
                     <!-- Gallery Item 1 -->
                     <div class="gallery-item fade-in" id="gallery-item-1">
-                        <!-- TO ADD IMAGE: Replace the src with your image path -->
-                        <!-- Example: <img class="gallery-image" id="gallery-image-1" src="https://example.com/nidhi-smile.jpg" alt="Her Beautiful Smile"> -->
+                        <!-- Images will be loaded dynamically based on user -->
                         <img class="gallery-image" id="gallery-image-1" src="" alt="Her Beautiful Smile">
                         <i class="fas fa-smile-beam gallery-icon"></i>
                         <div class="gallery-label">Her Beautiful Smile</div>
@@ -733,7 +731,6 @@
                     
                     <!-- Gallery Item 2 -->
                     <div class="gallery-item fade-in" style="animation-delay: 0.2s" id="gallery-item-2">
-                        <!-- TO ADD IMAGE: Replace the src with your image path -->
                         <img class="gallery-image" id="gallery-image-2" src="" alt="Her Shining Moments">
                         <i class="fas fa-star gallery-icon"></i>
                         <div class="gallery-label">Her Shining Moments</div>
@@ -741,7 +738,6 @@
                     
                     <!-- Gallery Item 3 -->
                     <div class="gallery-item fade-in" style="animation-delay: 0.4s" id="gallery-item-3">
-                        <!-- TO ADD IMAGE: Replace the src with your image path -->
                         <img class="gallery-image" id="gallery-image-3" src="" alt="Her Joyful Memories">
                         <i class="fas fa-heart gallery-icon"></i>
                         <div class="gallery-label">Her Joyful Memories</div>
@@ -749,14 +745,13 @@
                     
                     <!-- Gallery Item 4 -->
                     <div class="gallery-item fade-in" style="animation-delay: 0.6s" id="gallery-item-4">
-                        <!-- TO ADD IMAGE: Replace the src with your image path -->
                         <img class="gallery-image" id="gallery-image-4" src="" alt="Queen of Hearts">
                         <i class="fas fa-crown gallery-icon"></i>
                         <div class="gallery-label">Queen of Hearts</div>
                     </div>
                 </div>
                 
-                <p style="text-align: center; color: #7a7a7a; margin-top: 20px; font-style: italic;">
+                <p style="text-align: center; color: #7a7a7a; margin-top: 20px; font-style: italic;" id="gallery-message">
                     Each of these placeholders is waiting for her beautiful photos
                 </p>
             </div>
@@ -810,6 +805,7 @@
             const messageContent = document.getElementById('message-content');
             const flowerContainer = document.getElementById('flower-container');
             const galleryTitle = document.getElementById('gallery-title');
+            const galleryMessage = document.getElementById('gallery-message');
             
             // Get gallery images
             const galleryImages = [
@@ -832,6 +828,44 @@
             // White flowers array
             const whiteFlowers = ['🌸', '🌼'];
             
+            // Image sets for different users
+            const imageSets = {
+                // For Nidhi (when she enters "chandan")
+                nidhi: {
+                    profileImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80",
+                    galleryImages: [
+                        "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=250&q=80",
+                        "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=250&q=80",
+                        "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=250&q=80",
+                        "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=250&q=80"
+                    ],
+                    galleryMessage: "Beautiful memories of you, Nidhi!"
+                },
+                
+                // For non-Nidhi users
+                others: {
+                    profileImage: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80",
+                    galleryImages: [
+                        "https://images.unsplash.com/photo-1519699047748-de8e457a634e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=250&q=80",
+                        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=250&q=80",
+                        "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=250&q=80",
+                        "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=250&q=80"
+                    ],
+                    galleryMessage: "Each of these placeholders is waiting for her beautiful photos"
+                }
+            };
+            
+            // Fallback images
+            const fallbackImages = {
+                profile: "https://via.placeholder.com/300x300/ffd6e7/5a3d5c?text=Beautiful+Picture",
+                gallery: [
+                    "https://via.placeholder.com/300x250/ffd6e7/5a3d5c?text=Her+Beautiful+Smile",
+                    "https://via.placeholder.com/300x250/c1f0ff/5a3d5c?text=Her+Shining+Moments",
+                    "https://via.placeholder.com/300x250/fff9e6/5a3d5c?text=Her+Joyful+Memories",
+                    "https://via.placeholder.com/300x250/ffcce0/5a3d5c?text=Queen+of+Hearts"
+                ]
+            };
+            
             // Function to create falling flowers
             function createFallingFlower(isWhite = false) {
                 const flower = document.createElement('div');
@@ -846,30 +880,24 @@
                 
                 flower.innerHTML = flowerType;
                 
-                // Random position
                 const leftPos = Math.random() * 100;
                 flower.style.left = leftPos + 'vw';
                 
-                // Random size
                 const size = Math.random() * 25 + 20;
                 flower.style.fontSize = size + 'px';
                 
-                // Random color for colored flowers
                 if (!isWhite && Math.random() > 0.3) {
                     flower.style.color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
                 }
                 
-                // Random animation duration
                 const duration = Math.random() * 5 + 8;
                 flower.style.animation = `flowerFall ${duration}s linear forwards`;
                 
-                // Random animation delay
                 const delay = Math.random() * 2;
                 flower.style.animationDelay = delay + 's';
                 
                 flowerContainer.appendChild(flower);
                 
-                // Remove flower after animation completes
                 setTimeout(() => {
                     if (flower.parentNode) {
                         flower.remove();
@@ -879,11 +907,10 @@
                 return flower;
             }
             
-            // Function to create blooming flowers on UI elements
+            // Function to create blooming flowers
             function createBloomingFlower(element, isWhite = false) {
                 const rect = element.getBoundingClientRect();
                 
-                // Create multiple blooms around the element
                 const bloomCount = Math.floor(Math.random() * 3) + 2;
                 for (let i = 0; i < bloomCount; i++) {
                     const bloom = document.createElement('div');
@@ -898,29 +925,24 @@
                     
                     bloom.innerHTML = flowerType;
                     
-                    // Position around the element
                     const offsetX = Math.random() * rect.width - rect.width/2;
                     const offsetY = Math.random() * rect.height - rect.height/2;
                     
                     bloom.style.left = (rect.left + rect.width/2 + offsetX) + 'px';
                     bloom.style.top = (rect.top + rect.height/2 + offsetY) + 'px';
                     
-                    // Random size
                     const size = Math.random() * 20 + 25;
                     bloom.style.fontSize = size + 'px';
                     
-                    // Random color for colored flowers
                     if (!isWhite && Math.random() > 0.4) {
                         bloom.style.color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
                     }
                     
-                    // Animation
                     const duration = Math.random() * 1.5 + 1;
                     bloom.style.animation = `flowerBloom ${duration}s ease-out forwards`;
                     
                     document.body.appendChild(bloom);
                     
-                    // Remove after animation
                     setTimeout(() => {
                         if (bloom.parentNode) {
                             bloom.remove();
@@ -929,9 +951,8 @@
                 }
             }
             
-            // Function to start continuous flower fall
+            // Start continuous flower fall
             function startFlowerFall(isNidhi = false) {
-                // Initial burst of flowers
                 const initialCount = isNidhi ? 40 : 15;
                 for (let i = 0; i < initialCount; i++) {
                     setTimeout(() => {
@@ -939,7 +960,6 @@
                     }, i * 50);
                 }
                 
-                // Continuous falling flowers
                 const flowerInterval = setInterval(() => {
                     if (Math.random() > 0.3) {
                         createFallingFlower(isNidhi && Math.random() > 0.6);
@@ -949,49 +969,41 @@
                 return flowerInterval;
             }
             
-            // Function to trigger blooms on specific elements
+            // Trigger blooms on elements
             function triggerElementBlooms(isNidhi = false) {
-                // Bloom on greeting
                 setTimeout(() => {
                     createBloomingFlower(personalizedGreeting, isNidhi);
                 }, 500);
                 
-                // Bloom on image container
                 setTimeout(() => {
                     createBloomingFlower(document.querySelector('.image-container'), isNidhi);
                 }, 1000);
                 
-                // Bloom on poem title
                 setTimeout(() => {
                     createBloomingFlower(poemTitle, isNidhi);
                 }, 1500);
                 
-                // Bloom on next button
                 setTimeout(() => {
                     createBloomingFlower(nextPageBtn, isNidhi);
                 }, 2000);
             }
             
-            // Function to trigger blooms on second page
+            // Trigger blooms on second page
             function triggerSecondPageBlooms(isNidhi = false) {
-                // Bloom on page title
                 setTimeout(() => {
                     createBloomingFlower(document.querySelector('.page-title'), isNidhi);
                 }, 500);
                 
-                // Bloom on gallery items
                 galleryItems.forEach((item, index) => {
                     setTimeout(() => {
                         createBloomingFlower(item, isNidhi && Math.random() > 0.5);
                     }, 1000 + (index * 400));
                 });
                 
-                // Bloom on message container
                 setTimeout(() => {
                     createBloomingFlower(document.querySelector('.message-container'), isNidhi);
                 }, 3000);
                 
-                // Extra white flowers for Nidhi on second page
                 if (isNidhi) {
                     for (let i = 0; i < 8; i++) {
                         setTimeout(() => {
@@ -1001,23 +1013,55 @@
                 }
             }
             
-            // Function to check if image URLs are provided and display them
-            function checkAndDisplayImages() {
-                // Check profile image
-                if (profileImage.src) {
-                    imagePlaceholder.style.display = 'none';
-                    profileImage.style.display = 'block';
-                }
-                
-                // Check gallery images
-                galleryImages.forEach((img, index) => {
-                    if (img.src) {
-                        const item = galleryItems[index];
-                        item.querySelector('.gallery-icon').style.display = 'none';
-                        item.querySelector('.gallery-label').style.display = 'none';
-                        img.style.display = 'block';
-                    }
+            // Load images with error handling
+            function loadImage(imgElement, src, fallbackSrc) {
+                return new Promise((resolve) => {
+                    imgElement.onerror = function() {
+                        this.src = fallbackSrc;
+                        resolve(false);
+                    };
+                    imgElement.onload = function() {
+                        resolve(true);
+                    };
+                    imgElement.src = src;
                 });
+            }
+            
+            // Display images based on user type
+            async function displayImages(userType, isFirstPage = true) {
+                const imageSet = imageSets[userType];
+                const fallbackSet = fallbackImages;
+                
+                if (isFirstPage) {
+                    if (imageSet && imageSet.profileImage) {
+                        await loadImage(profileImage, imageSet.profileImage, fallbackSet.profile);
+                        imagePlaceholder.style.display = 'none';
+                        profileImage.style.display = 'block';
+                    }
+                } else {
+                    if (imageSet && imageSet.galleryImages) {
+                        for (let i = 0; i < galleryImages.length; i++) {
+                            if (i < imageSet.galleryImages.length) {
+                                const success = await loadImage(
+                                    galleryImages[i], 
+                                    imageSet.galleryImages[i], 
+                                    fallbackSet.gallery[i] || fallbackSet.gallery[0]
+                                );
+                                
+                                if (success) {
+                                    const item = galleryItems[i];
+                                    item.querySelector('.gallery-icon').style.display = 'none';
+                                    item.querySelector('.gallery-label').style.display = 'none';
+                                    galleryImages[i].style.display = 'block';
+                                }
+                            }
+                        }
+                        
+                        if (imageSet.galleryMessage) {
+                            galleryMessage.textContent = imageSet.galleryMessage;
+                        }
+                    }
+                }
             }
             
             // Poem variations
@@ -1041,7 +1085,7 @@
                 "ಕತ್ತಲನ್ನೇ ಸುಂದರಗೊಳಿಸುವ ಬೆಳದಿಂಗಳು ಅವಳು."
             ];
             
-            // Message variations (original wording)
+            // Message variations
             const messageForNidhi = `
                 <p>My dear friend,</p>
                 <p style="margin-top: 20px;">
@@ -1088,7 +1132,7 @@
                 </p>
             `;
             
-            // Predefined messages for Nidhi (original wording)
+            // Messages for Nidhi
             const nidhiMessages = {
                 greeting: "Welcome to Your World, Princess Nidhi!",
                 tagline: "A world where you are admired, celebrated, and cherished beyond words",
@@ -1099,7 +1143,7 @@
                 messageTitle: "A Message Just For You"
             };
             
-            // Generic messages for other names (original wording)
+            // Generic messages for others
             const genericMessages = {
                 greeting: "Welcome to world of the most beautiful woman",
                 tagline: "A tribute to someone truly extraordinary",
@@ -1110,8 +1154,12 @@
                 messageTitle: "A Message About Her"
             };
             
-            // Flag to track if user is Nidhi
-            let isNidhi = false;
+            // User tracking
+            let currentUser = {
+                isNidhi: false,
+                answeredSecurity: false,
+                name: ""
+            };
             let flowerInterval = null;
             
             // Handle form submission
@@ -1123,28 +1171,25 @@
             });
             
             // Handle next page button
-            nextPageBtn.addEventListener('click', function() {
-                // Show security modal only if it's Nidhi
-                if (isNidhi) {
+            nextPageBtn.addEventListener('click', async function() {
+                if (currentUser.isNidhi && !currentUser.answeredSecurity) {
                     securityModal.style.display = 'flex';
                     securityInput.focus();
                 } else {
-                    // For non-Nidhi users, just go to second page
                     mainContent.style.display = 'none';
                     secondPage.style.display = 'block';
                     
-                    // Check and display images
-                    checkAndDisplayImages();
+                    const userType = (currentUser.isNidhi && currentUser.answeredSecurity) ? 'nidhi' : 'others';
                     
-                    // Trigger animations on second page
+                    await displayImages(userType, false);
+                    
                     setTimeout(() => {
                         const fadeElements = secondPage.querySelectorAll('.fade-in');
                         fadeElements.forEach(el => {
                             el.style.opacity = "1";
                         });
                         
-                        // Trigger blooms on second page
-                        triggerSecondPageBlooms(isNidhi);
+                        triggerSecondPageBlooms(currentUser.isNidhi);
                     }, 100);
                 }
             });
@@ -1155,7 +1200,7 @@
                 mainContent.style.display = 'block';
             });
             
-            // Handle security question submission
+            // Handle security question
             securitySubmit.addEventListener('click', checkSecurityAnswer);
             securityInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
@@ -1163,40 +1208,33 @@
                 }
             });
             
-            function checkSecurityAnswer() {
+            async function checkSecurityAnswer() {
                 const answer = securityInput.value.trim().toLowerCase();
                 
                 if (answer === 'chandan') {
-                    // Correct answer - proceed to second page
+                    currentUser.answeredSecurity = true;
                     securityModal.style.display = 'none';
                     mainContent.style.display = 'none';
                     secondPage.style.display = 'block';
                     
-                    // Check and display images
-                    checkAndDisplayImages();
+                    await displayImages('nidhi', false);
                     
-                    // Trigger animations on second page
                     setTimeout(() => {
                         const fadeElements = secondPage.querySelectorAll('.fade-in');
                         fadeElements.forEach(el => {
                             el.style.opacity = "1";
                         });
                         
-                        // Trigger blooms on second page
                         triggerSecondPageBlooms(true);
                     }, 100);
                     
-                    // Clear input and hide error
                     securityInput.value = '';
                     securityError.style.display = 'none';
                     
-                    // Add special effects for correct answer
                     document.body.style.background = "linear-gradient(135deg, #a1c4fd, #c2e9fb)";
                     
-                    // Show success message
                     alert("Perfect! That's the right answer! ❤️");
                 } else {
-                    // Wrong answer - show error
                     securityError.style.display = 'block';
                     securityInput.value = '';
                     securityInput.focus();
@@ -1214,7 +1252,7 @@
                 });
             }
             
-            function revealContent() {
+            async function revealContent() {
                 const name = nameInput.value.trim();
                 
                 if (name === "") {
@@ -1222,68 +1260,56 @@
                     return;
                 }
                 
-                // Check if the name is "Nidhi" (case-insensitive)
-                isNidhi = name.toLowerCase() === "nidhi";
-                const messages = isNidhi ? nidhiMessages : genericMessages;
+                currentUser.isNidhi = name.toLowerCase() === "nidhi";
+                currentUser.name = name;
+                currentUser.answeredSecurity = false;
                 
-                // Update the content based on the name
+                const messages = currentUser.isNidhi ? nidhiMessages : genericMessages;
+                
                 personalizedGreeting.textContent = messages.greeting;
                 tagline.textContent = messages.tagline;
                 surpriseNote.textContent = messages.surprise;
                 poemTitle.textContent = messages.poemTitle;
                 galleryTitle.textContent = messages.galleryTitle;
                 
-                // Update second page content
                 document.querySelector('.page-subtitle').textContent = messages.pageSubtitle;
                 messageTitle.textContent = messages.messageTitle;
                 
-                // Display appropriate poem
-                displayPoem(isNidhi ? poemForNidhi : poemAboutNidhi);
+                displayPoem(currentUser.isNidhi ? poemForNidhi : poemAboutNidhi);
                 
-                // Display appropriate message on second page
-                messageContent.innerHTML = isNidhi ? messageForNidhi : messageAboutNidhi;
+                messageContent.innerHTML = currentUser.isNidhi ? messageForNidhi : messageAboutNidhi;
                 
-                // Check and display images
-                checkAndDisplayImages();
+                const userType = currentUser.isNidhi ? 'nidhi' : 'others';
+                await displayImages(userType, true);
                 
-                // Add special effects for Nidhi
-                if (isNidhi) {
+                if (currentUser.isNidhi) {
                     document.body.style.background = "linear-gradient(135deg, #ffcce0, #ff99cc)";
                     personalizedGreeting.style.background = "linear-gradient(to right, #ff3366, #ff6699)";
                     personalizedGreeting.style.webkitBackgroundClip = "text";
                     personalizedGreeting.style.webkitTextFillColor = "transparent";
                     
-                    // Start flower falling animation with more flowers for Nidhi
                     if (flowerInterval) clearInterval(flowerInterval);
                     flowerInterval = startFlowerFall(true);
                     
-                    // Trigger blooming flowers on UI elements with white flowers for Nidhi
                     triggerElementBlooms(true);
                     
-                    // Add special message to image placeholder
                     document.querySelector('.image-note').textContent = "A beautiful picture of the amazing Nidhi";
                     
-                    // Add subtle background pattern for Nidhi
                     poemContainer.style.backgroundImage = "radial-gradient(#ffcce0 2px, transparent 2px)";
                     poemContainer.style.backgroundSize = "20px 20px";
                     poemContainer.style.backgroundPosition = "0 0, 10px 10px";
                 } else {
-                    // Update image placeholder for non-Nidhi
                     document.querySelector('.image-note').textContent = "A beautiful picture of her would appear here";
                     
-                    // Start subtle flower falling for non-Nidhi users
                     if (flowerInterval) clearInterval(flowerInterval);
                     flowerInterval = startFlowerFall(false);
                     
-                    // Trigger subtle blooms for non-Nidhi
                     triggerElementBlooms(false);
                 }
                 
-                // Hide login screen and show main content
                 loginScreen.style.display = "none";
                 mainContent.style.display = "block";
                 
-                // Trigger animations
                 setTimeout(() => {
                     const fadeElements = mainContent.querySelectorAll('.fade-in');
                     fadeElements.forEach(el => {
@@ -1301,19 +1327,22 @@
             // Image setup instructions
             console.log("🌸🌻🌼 IMAGE SETUP INSTRUCTIONS 🌼🌻🌸");
             console.log("==========================================");
-            console.log("TO ADD IMAGES:");
-            console.log("1. Find these lines in the HTML:");
-            console.log("   - Line 284: <img id='profile-image' src='' alt='Her Picture'>");
-            console.log("   - Line 306: <img class='gallery-image' id='gallery-image-1' src='' alt='Her Beautiful Smile'>");
-            console.log("   - Line 315: <img class='gallery-image' id='gallery-image-2' src='' alt='Her Shining Moments'>");
-            console.log("   - Line 324: <img class='gallery-image' id='gallery-image-3' src='' alt='Her Joyful Memories'>");
-            console.log("   - Line 333: <img class='gallery-image' id='gallery-image-4' src='' alt='Queen of Hearts'>");
+            console.log("TO REPLACE IMAGES WITH YOUR OWN:");
+            console.log("1. Find the 'imageSets' object in JavaScript (around line 200)");
+            console.log("2. Replace the URLs in the 'nidhi' object with Nidhi's actual photos");
+            console.log("3. Replace the URLs in the 'others' object with generic photos");
+            console.log("4. Save the file and refresh");
             console.log("");
-            console.log("2. Replace the empty src='' with your image URLs:");
-            console.log("   Example: src='https://example.com/nidhi-profile.jpg'");
-            console.log("");
-            console.log("3. Save the file and refresh the page");
-            console.log("4. The images will automatically display when available");
+            console.log("EXAMPLE FOR NIDHI'S ACTUAL PHOTOS:");
+            console.log("nidhi: {");
+            console.log("  profileImage: 'https://your-domain.com/nidhi-profile.jpg',");
+            console.log("  galleryImages: [");
+            console.log("    'https://your-domain.com/nidhi-smile.jpg',");
+            console.log("    'https://your-domain.com/nidhi-shining.jpg',");
+            console.log("    'https://your-domain.com/nidhi-joyful.jpg',");
+            console.log("    'https://your-domain.com/nidhi-queen.jpg'");
+            console.log("  ]");
+            console.log("}");
             console.log("==========================================");
         });
     </script>
