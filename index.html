@@ -357,6 +357,88 @@
             margin: 0 auto 30px;
         }
         
+        /* Video Section (Only for Nidhi) */
+        .video-section {
+            padding: 40px;
+            background: linear-gradient(to bottom, #e6f7ff, #ffffff);
+            text-align: center;
+        }
+        
+        .video-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #f0f0f0, #ffffff);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border: 2px solid #4facfe;
+        }
+        
+        .video-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 auto;
+            background: #000;
+        }
+        
+        .video-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            object-fit: contain;
+            display: none;
+        }
+        
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #f8f8f8, #ffffff);
+            color: #5a7a8c;
+        }
+        
+        .video-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #4facfe;
+        }
+        
+        .video-note {
+            font-size: 1.3rem;
+            color: #5a7a8c;
+            text-align: center;
+            max-width: 500px;
+            padding: 0 20px;
+        }
+        
+        .video-message {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #5a7a8c;
+            font-style: italic;
+        }
+        
         /* Gallery Section */
         .gallery-section {
             padding: 40px;
@@ -583,7 +665,7 @@
                 border-radius: 15px;
             }
             
-            #login-screen, .profile-section, .poem-section, .second-page-header, .gallery-section, .message-section {
+            #login-screen, .profile-section, .poem-section, .second-page-header, .gallery-section, .message-section, .video-section {
                 padding: 40px 20px;
             }
             
@@ -596,7 +678,7 @@
                 font-size: 1.4rem;
             }
             
-            .section-title {
+            .section-title, .video-title {
                 font-size: 2rem;
             }
             
@@ -606,6 +688,10 @@
             
             .message-content {
                 font-size: 1.1rem;
+            }
+            
+            .video-wrapper {
+                padding-bottom: 75%; /* 4:3 aspect ratio for mobile */
             }
         }
         
@@ -620,16 +706,24 @@
                 line-height: 1.8;
             }
             
-            .section-title, .page-title {
+            .section-title, .page-title, .video-title {
                 font-size: 1.8rem;
             }
             
-            .poem-container, .message-container {
+            .poem-container, .message-container, .video-container {
                 padding: 25px 20px;
             }
             
             .gallery-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .video-icon {
+                font-size: 3rem;
+            }
+            
+            .video-note {
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -714,6 +808,33 @@
             <div class="second-page-header">
                 <h1 class="page-title">More Beautiful Moments</h1>
                 <p class="page-subtitle">A collection celebrating an extraordinary person</p>
+            </div>
+            
+            <!-- Video Section (Only for Nidhi) -->
+            <div class="video-section" id="video-section">
+                <div class="video-container fade-in">
+                    <h2 class="video-title" id="video-title">A Special Video Message</h2>
+                    
+                    <!-- Video Player (Only shows for Nidhi) -->
+                    <div class="video-wrapper" id="video-wrapper">
+                        <video class="video-player" id="special-video" controls controlsList="nodownload">
+                            <source src="" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        
+                        <!-- Video Placeholder (shows for others) -->
+                        <div class="video-placeholder" id="video-placeholder">
+                            <i class="fas fa-video video-icon"></i>
+                            <div class="video-note" id="video-note">
+                                A special video message would appear here for the special person
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-message" id="video-message">
+                        This video is exclusively for you!
+                    </div>
+                </div>
             </div>
             
             <!-- Gallery Section -->
@@ -804,6 +925,15 @@
             const galleryTitle = document.getElementById('gallery-title');
             const galleryMessage = document.getElementById('gallery-message');
             
+            // Video elements
+            const videoSection = document.getElementById('video-section');
+            const videoPlayer = document.getElementById('special-video');
+            const videoSource = videoPlayer.querySelector('source');
+            const videoPlaceholder = document.getElementById('video-placeholder');
+            const videoTitle = document.getElementById('video-title');
+            const videoNote = document.getElementById('video-note');
+            const videoMessage = document.getElementById('video-message');
+            
             // Get gallery images
             const galleryImages = [
                 document.getElementById('gallery-image-1'),
@@ -836,6 +966,10 @@
                         "N3.jpeg",
                         "N4.jpeg"
                     ],
+                    videoUrl: "Video.mp4",  // Nidhi's special video
+                    videoTitle: "A Special Video Message Just For You, Nidhi!",
+                    videoNote: "This video is exclusively for your eyes only",
+                    videoMessage: "Made with love, just for you 💖",
                     galleryMessage: "Beautiful memories of you, Nidhi!"
                 },
                 
@@ -848,6 +982,10 @@
                         "o3.jpeg",
                         "o4.jpeg"
                     ],
+                    videoUrl: null,  // No video for others
+                    videoTitle: "A Special Video Message",
+                    videoNote: "This video message is only for the special person",
+                    videoMessage: "This video is exclusively for the special person!",
                     galleryMessage: "Each of these placeholders is waiting for her beautiful photos"
                 }
             };
@@ -860,7 +998,8 @@
                     "https://via.placeholder.com/300x250/c1f0ff/5a3d5c?text=Her+Shining+Moments",
                     "https://via.placeholder.com/300x250/fff9e6/5a3d5c?text=Her+Joyful+Memories",
                     "https://via.placeholder.com/300x250/ffcce0/5a3d5c?text=Queen+of+Hearts"
-                ]
+                ],
+                video: null
             };
             
             // Function to create falling flowers
@@ -991,6 +1130,10 @@
                     createBloomingFlower(document.querySelector('.page-title'), isNidhi);
                 }, 500);
                 
+                setTimeout(() => {
+                    createBloomingFlower(videoTitle, isNidhi);
+                }, 600);
+                
                 galleryItems.forEach((item, index) => {
                     setTimeout(() => {
                         createBloomingFlower(item, isNidhi && Math.random() > 0.5);
@@ -1014,13 +1157,33 @@
             function loadImage(imgElement, src, fallbackSrc) {
                 return new Promise((resolve) => {
                     imgElement.onerror = function() {
-                        this.src = fallbackSrc;
+                        if (fallbackSrc) {
+                            this.src = fallbackSrc;
+                        }
                         resolve(false);
                     };
                     imgElement.onload = function() {
                         resolve(true);
                     };
                     imgElement.src = src;
+                });
+            }
+            
+            // Load video with error handling
+            function loadVideo(videoElement, videoSourceElement, src) {
+                return new Promise((resolve) => {
+                    videoElement.onerror = function() {
+                        console.log("Error loading video");
+                        resolve(false);
+                    };
+                    
+                    videoElement.onloadeddata = function() {
+                        console.log("Video loaded successfully");
+                        resolve(true);
+                    };
+                    
+                    videoSourceElement.src = src;
+                    videoElement.load();
                 });
             }
             
@@ -1036,6 +1199,37 @@
                         profileImage.style.display = 'block';
                     }
                 } else {
+                    // Handle video display
+                    if (imageSet.videoUrl) {
+                        // Nidhi sees the video
+                        console.log("Loading video for Nidhi:", imageSet.videoUrl);
+                        await loadVideo(videoPlayer, videoSource, imageSet.videoUrl);
+                        
+                        // Show video player, hide placeholder
+                        videoPlayer.style.display = 'block';
+                        videoPlaceholder.style.display = 'none';
+                        
+                        // Update video text
+                        videoTitle.textContent = imageSet.videoTitle;
+                        videoNote.textContent = imageSet.videoNote;
+                        videoMessage.textContent = imageSet.videoMessage;
+                        
+                        // Optional: Auto-play video
+                        // setTimeout(() => {
+                        //     videoPlayer.play().catch(e => console.log("Auto-play prevented:", e));
+                        // }, 1000);
+                    } else {
+                        // Others see placeholder
+                        videoPlayer.style.display = 'none';
+                        videoPlaceholder.style.display = 'flex';
+                        
+                        // Update placeholder text
+                        videoTitle.textContent = imageSet.videoTitle;
+                        videoNote.textContent = imageSet.videoNote;
+                        videoMessage.textContent = imageSet.videoMessage;
+                    }
+                    
+                    // Display gallery images
                     if (imageSet && imageSet.galleryImages) {
                         for (let i = 0; i < galleryImages.length; i++) {
                             if (i < imageSet.galleryImages.length) {
@@ -1052,10 +1246,6 @@
                                     galleryImages[i].style.display = 'block';
                                 }
                             }
-                        }
-                        
-                        if (imageSet.galleryMessage) {
-                            galleryMessage.textContent = imageSet.galleryMessage;
                         }
                     }
                 }
@@ -1186,7 +1376,7 @@
                             el.style.opacity = "1";
                         });
                         
-                        triggerSecondPageBlooms(currentUser.isNidhi);
+                        triggerSecondPageBlooms(currentUser.isNidhi && currentUser.answeredSecurity);
                     }, 100);
                 }
             });
@@ -1320,27 +1510,6 @@
             
             // Focus on the input field
             nameInput.focus();
-            
-            // Image setup instructions
-            console.log("🌸🌻🌼 IMAGE SETUP INSTRUCTIONS 🌼🌻🌸");
-            console.log("==========================================");
-            console.log("TO REPLACE IMAGES WITH YOUR OWN:");
-            console.log("1. Find the 'imageSets' object in JavaScript (around line 200)");
-            console.log("2. Replace the URLs in the 'nidhi' object with Nidhi's actual photos");
-            console.log("3. Replace the URLs in the 'others' object with generic photos");
-            console.log("4. Save the file and refresh");
-            console.log("");
-            console.log("EXAMPLE FOR NIDHI'S ACTUAL PHOTOS:");
-            console.log("nidhi: {");
-            console.log("  profileImage: 'https://your-domain.com/nidhi-profile.jpg',");
-            console.log("  galleryImages: [");
-            console.log("    'https://your-domain.com/nidhi-smile.jpg',");
-            console.log("    'https://your-domain.com/nidhi-shining.jpg',");
-            console.log("    'https://your-domain.com/nidhi-joyful.jpg',");
-            console.log("    'https://your-domain.com/nidhi-queen.jpg'");
-            console.log("  ]");
-            console.log("}");
-            console.log("==========================================");
         });
     </script>
 </body>
